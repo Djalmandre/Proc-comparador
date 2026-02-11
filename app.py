@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
-import openpyxl
+# import openpyxl  # REMOVA ESTA LINHA - não precisa importar diretamente
 from io import BytesIO
-import base64
 
 # Configuração da página
 st.set_page_config(
