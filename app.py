@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-# import openpyxl  # REMOVA ESTA LINHA - não precisa importar diretamente
 from io import BytesIO
 
 # Configuração da página
@@ -21,7 +20,7 @@ similar às funções PROCV e PROCX do Excel.
 @st.cache_data
 def carregar_planilha(arquivo):
     try:
-        df = pd.read_excel(arquivo)
+        df = pd.read_excel(arquivo, engine='openpyxl')
         return df
     except Exception as e:
         st.error(f"Erro ao carregar arquivo: {str(e)}")
@@ -43,13 +42,12 @@ def comparar_planilhas(df1, df2, coluna1, coluna2, tipo_comparacao="exata"):
                     for idx2, row2 in matches.iterrows():
                         resultados.append({
                             'Valor': valor1,
-                            'Linha Planilha 1': idx1 + 2,  # +2 porque Excel começa em 1 e tem cabeçalho
+                            'Linha Planilha 1': idx1 + 2,
                             'Linha Planilha 2': idx2 + 2,
                             'Dados Planilha 1': df1.loc[idx1].to_dict(),
                             'Dados Planilha 2': row2.to_dict()
                         })
                     
-                    # Contagem de repetições
                     if valor1 not in contagem:
                         contagem[valor1] = 0
                     contagem[valor1] += len(matches)
@@ -195,7 +193,6 @@ if arquivo1 and arquivo2:
                     # Resultados detalhados
                     st.subheader("📋 Resultados Detalhados")
                     
-                    # Criar DataFrame de resultados
                     if tipo_comparacao == "exata":
                         df_resultados = pd.DataFrame([
                             {
@@ -278,7 +275,6 @@ if arquivo1 and arquivo2:
                     st.warning("⚠️ Nenhuma correspondência encontrada entre as planilhas.")
 
 else:
-    # Instruções iniciais
     st.info("""
     ### 📌 Como usar:
     
@@ -294,7 +290,6 @@ else:
     - **Parcial**: Procura valores que contêm parte do texto
     """)
     
-    # Exemplo visual
     st.subheader("📊 Exemplo Visual")
     
     col_ex1, col_ex2 = st.columns(2)
@@ -315,6 +310,5 @@ else:
         })
         st.dataframe(exemplo2, use_container_width=True)
 
-# Footer
 st.divider()
-st.caption("Desenvolvido para comparação de planilhas | Djalma A Barbosa 2026 - Petrobras")
+st.caption("Desenvolvido para comparação de planilhas | Petrobras")
